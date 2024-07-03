@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: jsgui
-Version: 0.9.0
+Version: 0.9.1
 Summary: jsgui provides gui to edit json files based on a schema file
 Home-page: https://github.com/truekenji/jsgui
 Author: TrueKenji
@@ -9,6 +9,9 @@ Classifier: Programming Language :: Python :: 3
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Operating System :: OS Independent
 Description-Content-Type: text/markdown
+Requires-Dist: numpy
+Requires-Dist: jsonschema
+Requires-Dist: decomply
 
 # JSGUI - A JSON Schema based GUI to create and edit JSON files
 
