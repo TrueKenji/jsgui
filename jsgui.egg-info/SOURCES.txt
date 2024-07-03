@@ -1,0 +1,11 @@
+README.md
+setup.py
+jsgui/__init__.py
+jsgui/jsgui.py
+jsgui/json_schema_model.py
+jsgui.egg-info/PKG-INFO
+jsgui.egg-info/SOURCES.txt
+jsgui.egg-info/dependency_links.txt
+jsgui.egg-info/top_level.txt
+jsgui/tests/__init__.py
+jsgui/tests/test.py

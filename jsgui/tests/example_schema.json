@@ -1,0 +1,35 @@
+{
+  "$id": "testSchema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "$comment": "Name of someone",
+      "default": "anonymous"
+    },
+    "age": {
+      "type": "number",
+      "$comment": "Age of someone"
+    },
+    "preferredColor": {
+      "type": "string",
+      "enum": [
+        "Red",
+        "Blue",
+        "Green"
+      ],
+      "default": "Red"
+    },
+    "freekeys": {
+      "type": "object",
+      "properties": {
+        ".*": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "required": [
+    "name"
+  ]
+}
