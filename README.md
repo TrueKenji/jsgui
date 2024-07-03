@@ -22,6 +22,10 @@ JSGUI provides a little tkinter based gui to allow for convenient configuration 
   - default
   - <i> ... work in progress to enable more keywords </i>
 
+## Install
+
+`pip install jsgui`
+
 ## How to use
 
 Simply start the application to open an empty window. Either drag-and-drop a json schema or use the Load Menu Button. The schema will be loaded with all `required` fields being active and `default` values inserted already.
