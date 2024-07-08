@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='jsgui',
-    version='0.9.1',
+    version='0.9.2',
     packages=find_packages(),
     description='jsgui provides gui to edit json files based on a schema file',
     long_description=open('README.md').read(),
@@ -19,5 +19,10 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
     ],
-    keywords=['GUI', 'JSON Schema', 'JSON', 'tkinter', 'decomply', 'Visualisation']
+    keywords=['GUI', 'JSON Schema', 'JSON', 'tkinter', 'decomply', 'Visualisation'],
+    entry_points={
+        'console_scripts': [
+            'jsgui = jsgui.main:main',
+        ],
+    },
 )

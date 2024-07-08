@@ -1,0 +1,2 @@
+[console_scripts]
+jsgui = jsgui.main:main

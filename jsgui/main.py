@@ -1,7 +1,7 @@
 import json
-from view.tkview import TKView
+from .view.tkview import TKView
 from decomply import Decomply
-from json_schema_model import JSONSchemaModel
+from .json_schema_model import JSONSchemaModel
 
 
 def is_json_schema(json_content: dict) -> bool:
@@ -138,7 +138,9 @@ class Controller:
                 self.model.update_key(trace, key_text)
         self.view.paint(self.model)
 
-
-if __name__ == "__main__":
+def main():
     controller = Controller()
     controller.mainloop()
+
+if __name__ == "__main__":
+    main()

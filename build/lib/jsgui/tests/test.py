@@ -1,5 +1,5 @@
 import unittest
-from ..json_schema_model import JSONSchemaModel
+from model.json_schema_model import JSONSchemaModel
 
 
 class TestJSONSchemaModel(unittest.TestCase):
