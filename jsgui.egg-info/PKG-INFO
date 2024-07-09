@@ -1,7 +1,7 @@
 Metadata-Version: 2.1
 Name: jsgui
-Version: 0.9.2
-Summary: jsgui provides gui to edit json files based on a schema file
+Version: 0.9.3
+Summary: jsgui provides a gui to edit json files based on a schema file
 Home-page: https://github.com/truekenji/jsgui
 Author: TrueKenji
 Keywords: GUI,JSON Schema,JSON,tkinter,decomply,Visualisation
@@ -12,6 +12,8 @@ Description-Content-Type: text/markdown
 Requires-Dist: numpy
 Requires-Dist: jsonschema
 Requires-Dist: decomply
+Requires-Dist: tkinter
+Requires-Dist: tkinterdnd2
 
 # JSGUI - A JSON Schema based GUI to create and edit JSON files
 

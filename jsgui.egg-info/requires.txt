@@ -1,3 +1,5 @@
 numpy
 jsonschema
 decomply
+tkinter
+tkinterdnd2

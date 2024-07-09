@@ -2,9 +2,9 @@ from setuptools import setup, find_packages
 
 setup(
     name='jsgui',
-    version='0.9.2',
+    version='0.9.3',
     packages=find_packages(),
-    description='jsgui provides gui to edit json files based on a schema file',
+    description='jsgui provides a gui to edit json files based on a schema file',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',  # for Markdown
     author='TrueKenji',
@@ -13,6 +13,8 @@ setup(
         'numpy',
         'jsonschema',
         'decomply',
+        'tkinter',
+        'tkinterdnd2'
     ],
     classifiers=[
         'Programming Language :: Python :: 3',
