@@ -1,10 +1,13 @@
 import numpy as np
 import tkinter as tk
-import tkinterdnd2
+try:
+    import tkinterdnd2
+except:
+    tkinterdnd2 = None
 from tkinter import filedialog, messagebox
 from idlelib.tooltip import Hovertip
 from copy import deepcopy
-from typing import Union, TypedDict, Optional
+from typing import Union, TypedDict, Optional, List
 from .view import View
 from decomply import Decomply
 from typing import TYPE_CHECKING
@@ -34,7 +37,7 @@ class Node(TypedDict):
     }
     """
     value: Optional[Union[str, int]]
-    enum: Optional[list[str, int]]
+    enum: Optional[List[Union[str, int]]]
 
 
 class DelayableEntry(tk.Entry):
@@ -72,9 +75,12 @@ class TKView(View):
         """
         super().__init__(controller)
 
-        self.root = tkinterdnd2.Tk()
-        self.root.drop_target_register(tkinterdnd2.DND_FILES)
-        self.root.dnd_bind('<<Drop>>', self.drop)
+        if tkinterdnd2:
+            self.root = tkinterdnd2.Tk()
+            self.root.drop_target_register(tkinterdnd2.DND_FILES)
+            self.root.dnd_bind('<<Drop>>', self.drop)
+        else:
+            self.root = tk.Tk()
         self.root.protocol("WM_DELETE_WINDOW", self.root.destroy)
         self.root.title("JSON Schema-based Editor")
 
@@ -160,12 +166,12 @@ class TKView(View):
     def save(self) -> str:
         return filedialog.asksaveasfile(mode="w", defaultextension=".json")
 
-    def _create_widget(self, item: Node, trace: list[Union[str, int]], row: int, col: int) -> None:
+    def _create_widget(self, item: Node, trace: List[Union[str, int]], row: int, col: int) -> None:
         """create a concrete, user editable widget like textfield or dropdown
 
         Args:
             item (Node): containing the specification of the widget according to the schema
-            trace (list[Union[str, int]]): a list of keys
+            trace (List[Union[str, int]]): a list of keys
             row (int): position in the grid
             col (int): position in the grid
         """

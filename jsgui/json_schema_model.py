@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, List
 import jsonschema.exceptions
 import numpy as np
 from copy import deepcopy
@@ -59,10 +59,10 @@ class JSONSchemaModel:
             self.schema, initial_check=False
         )
 
-    def get(self, trace: list[Union[str, int]]) -> any:
+    def get(self, trace: List[Union[str, int]]) -> any:
         """Lookup a value in the nested dict schema.
         Args:
-            trace (list[Union[str, int]]): the list of keys
+            trace (List[Union[str, int]]): the list of keys
 
         Returns:
             any: the found value or None
@@ -70,7 +70,7 @@ class JSONSchemaModel:
         return JSONSchemaModel.staticGet(self.schema, trace)
 
     @staticmethod
-    def staticGet(schema, trace: list[Union[str, int]]) -> any:
+    def staticGet(schema, trace: List[Union[str, int]]) -> any:
         """@get
         """
         item = schema
@@ -81,12 +81,12 @@ class JSONSchemaModel:
             item = item[identifier]
         return item
 
-    def is_required(self, trace: list[Union[str, int]]) -> bool:
+    def is_required(self, trace: List[Union[str, int]]) -> bool:
         """Check whether the property associated with the trace is required.
         Since the required property in a schema is one level above, need to adjust
         Note that False is also returned if the trace is invalid
         Args:
-            trace (list[Union[str, int]]): the list of keys
+            trace (List[Union[str, int]]): the list of keys
 
         Returns:
             bool: whether the property is required
@@ -107,11 +107,11 @@ class JSONSchemaModel:
             raise Exception("Could not resolve reference %s" % ref)
         return referencedItem
 
-    def check(self, trace: list[Union[str, int]]) -> bool:
+    def check(self, trace: List[Union[str, int]]) -> bool:
         """Activate or deactive the property associated with the given trace
         Special treatment is required for .* and for $ref
         Args:
-            trace (list[Union[str, int]]): the list of keys
+            trace (List[Union[str, int]]): the list of keys
 
         Raises:
             Exception: if $ref is not resolvable
@@ -144,15 +144,15 @@ class JSONSchemaModel:
             item["active"] = not item["active"]
         return item["active"]
 
-    def add_key(self, trace: list[Union[str, int]], key_name: str) -> list[Union[str, int]]:
+    def add_key(self, trace: List[Union[str, int]], key_name: str) -> List[Union[str, int]]:
         """Create a new key by duplicating the property associated with the given trace
         Used to handle .*
         Args:
-            trace (list[Union[str, int]]): the list of keys
+            trace (List[Union[str, int]]): the list of keys
             key_name (str): the name of the new key
 
         Returns:
-            list[Union[str, int]]: the list of keys with the new key incorporated
+            List[Union[str, int]]: the list of keys with the new key incorporated
         """
         new_trace = trace[:-1] + [key_name]
         # if self.get(new_trace):
@@ -164,11 +164,11 @@ class JSONSchemaModel:
         # exchange the old key with the new and return entire trace
         return new_trace
 
-    def update_key(self, trace: list[Union[str, int]], key_name: str) -> None:
+    def update_key(self, trace: List[Union[str, int]], key_name: str) -> None:
         """Change the name of the key associated with the given trace
 
         Args:
-            trace (list[Union[str, int]]): a list of keys
+            trace (List[Union[str, int]]): a list of keys
             key_name (str): the new key name
         """
         parent = self.get(trace[:-1])
@@ -177,11 +177,11 @@ class JSONSchemaModel:
         del parent[trace[-1]]
         return trace[:-1] + [key_name]
 
-    def set_value(self, trace: list[Union[str, int]], value: any) -> any:
+    def set_value(self, trace: List[Union[str, int]], value: any) -> any:
         """set the value for the property associated with the given trace
         Need to ensure the .get method exists
         Args:
-            trace (list[Union[str, int]]): a list of keys
+            trace (List[Union[str, int]]): a list of keys
             value (any): the value to assign
 
         Returns:
@@ -310,7 +310,7 @@ class JSONSchemaModel:
             if isinstance(other_item, dict):
                 if key_to_merge in other_item:
                     item[key_to_merge] = other_item[key_to_merge]
-                return decomply.decomply(item, trace=trace, initial_check=False)
+                return decomply.decomply(item=item, trace=trace, initial_check=False)
             return item
 
         decomply = Decomply(traverse=lambda _, __: False, apply=apply)
