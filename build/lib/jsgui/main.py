@@ -14,7 +14,7 @@ def is_json_schema(json_content: dict) -> bool:
         bool: whether the supplied dict is a json schema
     """
     schema_keywords = {"$schema", "$id", "type", "properties", "items", "required",
-                       "definitions", "$ref", "additionalProperties", "patternProperties"}
+                       "definitions", "$ref", "additionalProperties", "additionalProperties"}
 
     if isinstance(json_content, dict):
         if any(keyword in json_content for keyword in schema_keywords):
@@ -121,15 +121,15 @@ class Controller:
         self.model.set_value(trace, new_value)
 
     def key_field_changed(self, trace: list, key_text: str) -> None:
-        """key fields are associated with patternProperties.
+        """key fields are associated with additionalProperties.
         If the placeholder field has changed, introduce an entirely new concrete field
         If an existing field has changed, just update the key
 
         Args:
             trace (list): a list of keys
-            key_text (str): the key_text to use for the patternProperties property
+            key_text (str): the key_text to use for the additionalProperties property
         """
-        if len(key_text) > 0 and trace[-2] == "patternProperties":
+        if len(key_text) > 0 and trace[-2] == "additionalProperties":
             # distinguish wildcard placeholder or existing property
             if not self.model.get(trace)["active"]:
                 newTrace = self.model.add_key(trace, key_text)

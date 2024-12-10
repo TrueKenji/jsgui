@@ -16,7 +16,7 @@ JSGUI provides a little tkinter based gui to allow for convenient configuration 
   - type
   - $comment
   - enum
-  - patternProperties
+  - additionalProperties
   - $ref
   - required
   - default

@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "properties": {
+    "INPUT": {
+      "type": "object",
+      "properties": {
+        "Age": {
+          "type": "number"
+        },
+        "Name": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {
+        "$ref": "#/properties/INPUT"
+      }
+    }
+  },
+  "required": ["INPUT"]
+}

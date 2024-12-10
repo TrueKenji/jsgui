@@ -32,10 +32,10 @@ class JSONSchemaModel:
         :return: None
         """
         traverse_keywords = ["type", "oneOf", "$ref"]
-        recursive_keywords = ["oneOf", "properties", "patternProperties"]
+        recursive_keywords = ["oneOf", "properties"]
 
-        def traverse(trace, item): return np.all(
-            [keyword not in item for keyword in traverse_keywords])
+        def traverse(trace, item):
+            return np.all([keyword not in item for keyword in traverse_keywords])
 
         def apply(trace: list, item: dict):
             if hasattr(item, "items"):
@@ -47,6 +47,8 @@ class JSONSchemaModel:
                         item[recursive_keyword] = decomply.decomply(
                             item[recursive_keyword], trace, initial_check=False)
                         trace.pop()
+                # if required and "additionalProperties" in item and "$ref" in item["additionalProperties"]:
+                #    item["additionalProperties"]["$ref"] = self.resolve_reference(item["additionalProperties"]["$ref"])
                 if "default" in item:
                     item["value"] = item["default"]
                     item["active"] = True
@@ -98,6 +100,13 @@ class JSONSchemaModel:
         res = required != None and trace[-1] in required
         return res
 
+    def resolve_reference(self, ref):
+        referencedItem = JSONSchemaModel.staticGet(
+            self.original_schema_initialized, ref.replace("#/", "").split("/"))
+        if not referencedItem:
+            raise Exception("Could not resolve reference %s" % ref)
+        return referencedItem
+
     def check(self, trace: list[Union[str, int]]) -> bool:
         """Activate or deactive the property associated with the given trace
         Special treatment is required for .* and for $ref
@@ -112,27 +121,27 @@ class JSONSchemaModel:
         """
         parent = self.get(trace[:-1])
         item = parent[trace[-1]]
-        item["active"] = not item["active"]
-        # remove deselected wildcards
-        if trace[-2] == "patternProperties" and not item["active"]:
-            del parent[trace[-1]]
-        if "$ref" in item:
-            ref = item["$ref"]
-            referencedItem = JSONSchemaModel.staticGet(
-                self.original_schema_initialized, ref.replace("#/", "").split("/"))
-            if not referencedItem:
-                raise Exception("Could not resolve reference %s" % ref)
-            if item["active"]:  # has been selected
-                # insert the ref information
+        if trace[-2] == "additionalProperties":
+            if "active" in item:
+                if item["active"]:
+                    del parent[trace[-1]]
+                # else case can't happen?
+            if "$ref" in parent:
+                ref = parent["$ref"]
+                referencedItem = self.resolve_reference(ref)
+                #if item["active"]:  # has been selected
+                    # insert the ref information
                 parent[trace[-1]] = deepcopy(referencedItem)
                 parent[trace[-1]]["active"] = True
-                # item = parent[trace[-1]]
-                # parent[trace[-1]]["$ref"] = ref
-            else:  # has been deselected
-                parent[trace[-1]] = {
-                    "$ref": ref,
-                    "active": False
-                }
+                item = parent[trace[-1]]
+                    # parent[trace[-1]]["$ref"] = ref
+                #else:  # has been deselected
+                #    parent[trace[-1]] = {
+                #        "$ref": ref,
+                #        "active": False
+                #    }
+        else:
+            item["active"] = not item["active"]
         return item["active"]
 
     def add_key(self, trace: list[Union[str, int]], key_name: str) -> list[Union[str, int]]:
@@ -225,14 +234,15 @@ class JSONSchemaModel:
             or ("active" in item and not item["active"])
             or trace[-1] == "required"
             or isEmpty(item)
+            or trace[-1] == "$ref"
         )
 
         def apply(trace, item):
             res = dict()
             if "properties" in item:
                 res.update(decomply.decomply(item["properties"]))
-            if "patternProperties" in item:
-                res.update(decomply.decomply(item["patternProperties"]))
+            if "additionalProperties" in item:
+                res.update(decomply.decomply(item["additionalProperties"]))
             if "oneOf" in item:
                 options = decomply.decomply(item["oneOf"])
                 if len(options) == 0:

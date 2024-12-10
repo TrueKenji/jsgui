@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='jsgui',
-    version='0.9.3',
+    version='0.9.4',
     packages=find_packages(),
     description='jsgui provides a gui to edit json files based on a schema file',
     long_description=open('README.md').read(),

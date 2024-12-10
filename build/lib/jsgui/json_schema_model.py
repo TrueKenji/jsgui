@@ -32,7 +32,7 @@ class JSONSchemaModel:
         :return: None
         """
         traverse_keywords = ["type", "oneOf", "$ref"]
-        recursive_keywords = ["oneOf", "properties", "patternProperties"]
+        recursive_keywords = ["oneOf", "properties", "additionalProperties"]
 
         def traverse(trace, item): return np.all(
             [keyword not in item for keyword in traverse_keywords])
@@ -114,7 +114,7 @@ class JSONSchemaModel:
         item = parent[trace[-1]]
         item["active"] = not item["active"]
         # remove deselected wildcards
-        if trace[-2] == "patternProperties" and not item["active"]:
+        if trace[-2] == "additionalProperties" and not item["active"]:
             del parent[trace[-1]]
         if "$ref" in item:
             ref = item["$ref"]
@@ -231,8 +231,8 @@ class JSONSchemaModel:
             res = dict()
             if "properties" in item:
                 res.update(decomply.decomply(item["properties"]))
-            if "patternProperties" in item:
-                res.update(decomply.decomply(item["patternProperties"]))
+            if "additionalProperties" in item:
+                res.update(decomply.decomply(item["additionalProperties"]))
             if "oneOf" in item:
                 options = decomply.decomply(item["oneOf"])
                 if len(options) == 0:

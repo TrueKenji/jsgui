@@ -197,7 +197,7 @@ class TKView(View):
         value_holders = []  # to prevent the garbage collector?
 
         traverse_keywords = ["type", "oneOf", "$ref"]
-        recursive_keywords = ["oneOf", "properties", "patternProperties"]
+        recursive_keywords = ["oneOf", "properties", "additionalProperties"]
 
         def traverse(_, item): return np.all(
             [keyword not in item for keyword in traverse_keywords])
@@ -218,7 +218,7 @@ class TKView(View):
             def is_disabled():
                 required = model.is_required(trace)
                 wildcard = (
-                    trace[-2] == "patternProperties") and not item["active"]
+                    trace[-2] == "additionalProperties") and not item["active"]
                 return required or wildcard
 
             state = "disabled" if is_disabled() else "normal"
@@ -236,11 +236,11 @@ class TKView(View):
 
             # generate key/description field. Possibly editable
             keyField = tk.StringVar()
-            callback = None if not trace[-2] == "patternProperties" else\
+            callback = None if not trace[-2] == "additionalProperties" else\
                 lambda _: self.controller.key_field_changed(
                     trace, keyField.get())
-            state = "disabled" if not trace[-2] == "patternProperties" else "normal"
-            delay = 0 if not trace[-2] == "patternProperties" else 1000
+            state = "disabled" if not trace[-2] == "additionalProperties" else "normal"
+            delay = 0 if not trace[-2] == "additionalProperties" else 1000
             keyWidget = DelayableEntry(
                 self.frame,
                 callback=callback,
